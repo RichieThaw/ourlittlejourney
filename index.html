@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="index.css">
+  <link href='https://fonts.googleapis.com/css?family=Lato:300,400,700' rel='stylesheet' type='text/css'>
+  <title>Our Little Journey</title> 
+</head>
+<body>
+  <div id="home"></div>
+<div id='stars'></div>
+<div id='stars2'></div>
+<div id='stars3'></div>
+
+  <nav  class="nav-bar">
+    <ul>
+      <a href="#home"><li>Home</li></a>
+      <a href="#been"><li>Been-Together</li></a>
+      <a href="#memo"><li>Memory</li></a>
+    </ul>
+  </nav>
+
+
+
+  <div  class="main">
+    <span class="one">
+      <img src="IMG_0065.jpg" alt="">
+      <h4>Your Lovely Mg</h4>
+      <p>Name - Richie</p>
+      <p>Age - 23</p>
+      <p>Location - Live In Mandalay</p>
+    </span>
+    <span class="two">
+      <h1>🩵</h1>
+      <p>Our Souls Have Grown Together In love!</p>
+      <p>We Still Fall In Love Each Other Every Day!</p>
+    </span>
+    <span  class="three">
+      <img src="Screenshot 2025-11-21 at 9.58.45 PM.jpg" alt="">
+      <h4>Your Lovely Baby</h4>
+      <p>Name - Kit Kit</p>
+      <p>Age - 23</p>
+      <p id="been">Location - Live In Mandalay</p>    
+    </span>
+
+  </div>
+
+
+  <div class="second">
+   <div class="card">
+    <h1>We've Been Together</h1>
+    <p class="lead">Select The Day You Started Being Together And I'll Show How Long.</p>
+
+    <div>
+      <div class="counter" id="counter"> Days</div>
+      <div class="small" id="breakdown"> Years,  Months, And  Days</div>
+    </div>
+
+    <div class="controls">
+      <input type="date" id="startDate" aria-label="Start date">
+      <button id="setBtn">Set</button>
+      <button id="todayBtn" class="secondary">Today</button>
+    </div>
+
+    <div style="margin-top:10px">
+      <button id="resetBtn" class="secondary">Reset</button>
+    </div>
+
+    <footer>Made with <span class="hearts"> <span>🩵</span><span></span></span></footer>
+  </div>
+  </div>
+
+  <div id="memo"></div>
+
+  <div class="heart">
+
+    <div class="row1">
+      <span class="a">
+        <img id="a" src="IMG_3773.jpg" alt="">
+       <img id="b" src="IMG_4611.jpg" alt="">
+        <img id="c" src="IMG_5215.jpg" alt="">
+      </span>
+      <span class="a">
+        <img id="a" src="IMG_5527.jpg" alt="">
+        <img id="b" src="IMG_5744.jpg" alt="">
+        <img id="c" src="IMG_5873.JPG" alt="">
+      </span>
+    </div>
+
+    <div class="row2">
+      <span class="b">
+         <img id="d" src="3.jpg" alt="">
+         <img id="e" src="IMG_5908.jpg" alt="">
+      </span>
+      <span class="c">
+        <img src="IMG_3771.jpg" alt="">
+        <img src="IMG_5257.jpg" alt="">
+      </span>
+      <span class="b">
+        <img id="f" src="IMG_6252.JPG" alt="">
+        <img id="g" src="IMG_6180.jpg" alt="">
+      </span>
+    </div>
+
+    <div class="row3">
+        <img id="h" src="IMG_6569.JPG" alt="">
+        <img id="i"  src="IMG_6570.JPG" alt="">
+        <img id="j"  src="IMG_6571.JPG" alt="">
+        <img id="i"  src="IMG_6572.JPG" alt="">
+        <img id="h"  src="IMG_6573.jpg" alt="">
+    </div>
+
+    <div class="row4">
+        <img src="IMG_5886.jpg" alt="">
+    </div>
+
+  </div>
+
+  <footer>
+   <p>Every Moment With You Feels Like A page From A Love Story.</p>
+   <p>No Matter Where Life Takes Us, My Heart Will Always Find Yours.</p>
+   <p> Made For Us — With Love, Patience, And Forever Intentions. 🩵</p>
+  </footer>
+  
+</body>
+
+<script>
+  // Simple together counter
+  const counter = document.getElementById('counter')
+  const breakdown = document.getElementById('breakdown')
+  const startDateInput = document.getElementById('startDate')
+  const setBtn = document.getElementById('setBtn')
+  const resetBtn = document.getElementById('resetBtn')
+  const todayBtn = document.getElementById('todayBtn')
+
+  // Load saved date from localStorage if present
+  const STORAGE_KEY = 'together_start_date_v1'
+  function loadSaved() {
+    const saved = localStorage.getItem(STORAGE_KEY)
+    if (saved) {
+      startDateInput.value = saved
+      update()
+    }
+  }
+
+  // Calculate difference in years, months, days
+  function diffYMD(start, end) {
+    // start and end are Date objects (start <= end)
+    let sy = start.getFullYear(), sm = start.getMonth(), sd = start.getDate()
+    let ey = end.getFullYear(), em = end.getMonth(), ed = end.getDate()
+
+    let y = ey - sy
+    let m = em - sm
+    let d = ed - sd
+
+    if (d < 0) {
+      // borrow days from previous month
+      const prevMonth = new Date(ey, em, 0) // last day of previous month in end's year/month
+      d += prevMonth.getDate()
+      m -= 1
+    }
+    if (m < 0) {
+      m += 12
+      y -= 1
+    }
+    return {years: y, months: m, days: d}
+  }
+
+  function daysBetween(start, end) {
+    const msPerDay = 1000 * 60 * 60 * 24
+    const diff = Math.floor((end - start) / msPerDay)
+    return diff
+  }
+
+  function update() {
+    const val = startDateInput.value
+    if (!val) {
+      counter.textContent = '— Days'
+      breakdown.textContent = '— Years, — Months, And — Days'
+      return
+    }
+    const start = new Date(val + 'T00:00:00')
+    const now = new Date()
+    if (start > now) {
+      counter.textContent = 'Start date is in the future'
+      breakdown.textContent = ''
+      return
+    }
+    const totalDays = daysBetween(start, now)
+    const parts = diffYMD(start, now)
+    counter.textContent = totalDays.toLocaleString() + (totalDays === 1 ? ' day' : ' days')
+    breakdown.textContent = `${parts.years} ${parts.years===1? 'year':'years'}, ${parts.months} ${parts.months===1? 'month':'months'}, and ${parts.days} ${parts.days===1? 'day':'days'}`
+  }
+
+  setBtn.addEventListener('click', () => {
+    if (!startDateInput.value) return
+    localStorage.setItem(STORAGE_KEY, startDateInput.value)
+    update()
+  })
+
+  resetBtn.addEventListener('click', () => {
+    localStorage.removeItem(STORAGE_KEY)
+    startDateInput.value = ''
+    update()
+  })
+
+  todayBtn.addEventListener('click', () => {
+    const now = new Date()
+    const isoDate = now.toISOString().slice(0,10)
+    startDateInput.value = isoDate
+    // do NOT save automatically; user can press Set
+    update()
+  })
+
+  // Update every minute so counter stays fresh (keeps in same page load)
+  setInterval(update, 60*1000)
+
+  // Keep input changes live
+  startDateInput.addEventListener('change', update)
+
+  // initialize
+  loadSaved()
+  update()
+</script>
+
+</html>
