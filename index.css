@@ -702,6 +702,10 @@ mask-border: radial-gradient(#000 69%,#0000 70%) 84.5%/50%;
     flex-direction: column;
   }
 
+  .two {
+    margin-bottom: 10px;
+  }
+
   .card {
     max-width: 75%;
     padding: 7px;
@@ -727,6 +731,12 @@ mask-border: radial-gradient(#000 69%,#0000 70%) 84.5%/50%;
   width: 80%;
   margin: 20px;
 }
+
+  .row3 {
+    display: flex;
+    flex-direction: column;
+  }
+
   .heart img {
     width: auto;
   }
