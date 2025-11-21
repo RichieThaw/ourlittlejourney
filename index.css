@@ -697,13 +697,18 @@ mask-border: radial-gradient(#000 69%,#0000 70%) 84.5%/50%;
 /* Small phones */
 @media (max-width: 480px) {
 
+  .main {
+    display: flex;
+    flex-direction: column;
+  }
+
   .card {
-    max-width: 90%;
-    padding: 18px;
+    max-width: 75%;
+    padding: 25px;
   }
 
   h1 {
-    font-size: 22px;
+    font-size: 20px;
   }
 
   p.lead {
@@ -714,6 +719,16 @@ mask-border: radial-gradient(#000 69%,#0000 70%) 84.5%/50%;
     font-size: 30px;
   }
 
+  .footer p {
+    font-size: 14px;
+  }
+.heart {
+  width: 80%;
+  margin: 20px;
+}
+  .heart img {
+    width: auto;
+  }
   .nav-bar ul {
     padding: 12px;
     gap: 15px;
