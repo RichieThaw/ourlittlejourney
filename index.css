@@ -704,7 +704,7 @@ mask-border: radial-gradient(#000 69%,#0000 70%) 84.5%/50%;
 
   .card {
     max-width: 75%;
-    padding: 25px;
+    padding: 7px;
   }
 
   h1 {
@@ -720,8 +720,9 @@ mask-border: radial-gradient(#000 69%,#0000 70%) 84.5%/50%;
   }
 
   .footer p {
-    font-size: 14px;
+    font-size: 10px;
   }
+  
 .heart {
   width: 80%;
   margin: 20px;
