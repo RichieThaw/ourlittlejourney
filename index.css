@@ -734,13 +734,17 @@ mask-border: radial-gradient(#000 69%,#0000 70%) 84.5%/50%;
   margin: 20px;
 }
 
-  .row3,.row2 {
+  row1,.row3,.row2 {
     display: flex;
     flex-direction: column;
   }
 
   .heart img {
-    width: auto;
+    width: 80px;
+    height:80px;
+    margin:10px;
+    mask-border: radial-gradient(#000 69%,#0000 70%) 84.5%/50%;
+  clip-path: polygon(-41% 0,50% 91%, 141% 0);
   }
   .nav-bar ul {
     padding: 12px;
