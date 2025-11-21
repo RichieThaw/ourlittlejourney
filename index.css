@@ -725,6 +725,8 @@ mask-border: radial-gradient(#000 69%,#0000 70%) 84.5%/50%;
 
   footer p {
     font-size: 14px;
+    margin: 0 7px;
+    
   }
   
 .heart {
@@ -732,7 +734,7 @@ mask-border: radial-gradient(#000 69%,#0000 70%) 84.5%/50%;
   margin: 20px;
 }
 
-  .row3 {
+  .row3,.row2 {
     display: flex;
     flex-direction: column;
   }
