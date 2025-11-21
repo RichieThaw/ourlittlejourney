@@ -743,8 +743,7 @@ mask-border: radial-gradient(#000 69%,#0000 70%) 84.5%/50%;
     flex-wrap:wrap;
 }
   .heart img {
-    width: 60px;
-    height:60px;
+    
     margin:10px;
     mask-border: radial-gradient(#000 69%,#0000 70%) 84.5%/50%;
   clip-path: polygon(-41% 0,50% 91%, 141% 0);
