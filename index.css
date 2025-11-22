@@ -734,6 +734,12 @@ mask-border: radial-gradient(#000 69%,#0000 70%) 84.5%/50%;
     margin: 10px;
     
   }
+
+  .vid, .aud {
+    justify-content: center;
+    align-item: center;
+    display: flex;
+  }
   
 .heart {
   width: 80%;
