@@ -47,12 +47,38 @@
 
   </div>
 
-  <div class="aud">
-  <audio controls>
-  <source src="James_Arthur_-_Say_You_Won_t_Let_Go__Lyrics_(256k).mp3" type="audio/mp3">
-  Your browser does not support the audio tag.
-</audio>
-</div>
+<div class="mm">
+   <div class="player" role="region" aria-label="Music player">
+    <div class="cover">
+      <img id="coverImg" src="placeholder.jpg" alt="Album cover" />
+      <div class="track-title" id="title">Song title</div>
+      <div class="track-artist" id="artist">Artist name</div>
+
+      <div class="progress" id="progress" aria-label="progress bar" role="slider" tabindex="0">
+        <div class="bar" id="progressBar"></div>
+      </div>
+      <div class="time"><span id="curTime">0:00</span><span id="dur">0:00</span></div>
+
+      <div class="controls">
+        <button id="prev" class="btn small">⏮</button>
+        <button id="play" class="btn big">▶</button>
+        <button id="next" class="btn small">⏭</button>
+      </div>
+
+      <div style="display:flex;gap:8px;margin-top:6px">
+        <button id="shuffle" class="btn small">🔀</button>
+        <button id="repeat" class="btn small">🔁</button>
+      </div>
+    </div>
+
+    <div class="playlist" id="playlist" aria-label="Playlist">
+      <!-- songs will be injected here by JS -->
+    </div>
+  </div>
+
+  </div>
+
+  <audio id="audio"></audio>
 
 
   <div class="second">
@@ -237,6 +263,162 @@
   // initialize
   loadSaved()
   update()
+
+
+
+
+
+   // ======= SAMPLE PLAYLIST =======
+    // Replace 'src' values with real mp3 file URLs or relative paths (e.g. "media/song1.mp3").
+    const songs = [
+            {title:"I Made it For You", artist:"Richie", src:"songs/song1.mp3", cover:"https://upload.wikimedia.org/wikipedia/commons/thumb/2/21/Love_heart_uidaodjsdsew.gif/1200px-Love_heart_uidaodjsdsew.gif"},
+
+      {title:"Letter-i ", artist:"Zenith", src:"songs/song1.mp3", cover:"https://i.scdn.co/image/ab67616d0000b273e78e38fc54fb9bf076273c51"},
+      {title:"Come Here", artist:"Zenith", src:"songs/song2.mp3", cover:"https://i.scdn.co/image/ab67616d0000b273e78e38fc54fb9bf076273c51"},
+      {title:"Say You Won't Let Go", artist:"James Arthur", src:"songs/song3.mp3", cover:"https://images.genius.com/c750249317a554ede550bbc5f9876807.1000x1000x1.png"},
+            {title:"Blue ", artist:"Yung Kai", src:"songs/song1.mp3", cover:"https://images.genius.com/96fab843dc59f3be9ec6e577de8552fa.1000x1000x1.png"},
+      {title:"If The World Was Ending ", artist:"JP Saxe", src:"songs/song1.mp3", cover:"https://upload.wikimedia.org/wikipedia/en/7/7a/If_the_World_Was_Ending_by_Saxe_and_Michaels.png"},
+      {title:"Letter-i ", artist:"Zenith", src:"songs/song1.mp3", cover:"https://images.unsplash.com/photo-1502082553048-f009c37129b9?q=80&w=800&auto=format&fit=crop&ixlib=rb-4.0.3&s=1"},
+      {title:"Letter-i ", artist:"Zenith", src:"songs/song1.mp3", cover:"https://images.unsplash.com/photo-1502082553048-f009c37129b9?q=80&w=800&auto=format&fit=crop&ixlib=rb-4.0.3&s=1"},
+      {title:"Letter-i ", artist:"Zenith", src:"songs/song1.mp3", cover:"https://images.unsplash.com/photo-1502082553048-f009c37129b9?q=80&w=800&auto=format&fit=crop&ixlib=rb-4.0.3&s=1"},
+
+    ];
+
+    // ======= STATE ======
+    let current = 0;
+    let isPlaying = false;
+    let isShuffle = false;
+    let repeatMode = false; // false = off, true = on
+
+    // ======= ELEMENTS =======
+    const audio = document.getElementById('audio');
+    const titleEl = document.getElementById('title');
+    const artistEl = document.getElementById('artist');
+    const coverImg = document.getElementById('coverImg');
+    const playlistEl = document.getElementById('playlist');
+    const playBtn = document.getElementById('play');
+    const prevBtn = document.getElementById('prev');
+    const nextBtn = document.getElementById('next');
+    const shuffleBtn = document.getElementById('shuffle');
+    const repeatBtn = document.getElementById('repeat');
+    const progress = document.getElementById('progress');
+    const progressBar = document.getElementById('progressBar');
+    const curTime = document.getElementById('curTime');
+    const dur = document.getElementById('dur');
+
+    // Build playlist UI
+    function renderPlaylist(){
+      playlistEl.innerHTML = '';
+      songs.forEach((s, i)=>{
+        const item = document.createElement('div');
+        item.className = 'song';
+        item.dataset.index = i;
+        item.innerHTML = `
+          <div class="thumb">${s.title.charAt(0)}</div>
+          <div class="meta">
+            <div class="name">${s.title}</div>
+            <div class="meta2">${s.artist}</div>
+          </div>
+          <div class="actions"><button class="btn small" data-play>Play</button></div>
+        `;
+        item.addEventListener('click', ()=> playIndex(i));
+        playlistEl.appendChild(item);
+      });
+      highlight();
+    }
+
+    function highlight(){
+      document.querySelectorAll('.song').forEach(el=> el.classList.remove('active'));
+      const active = document.querySelector(`.song[data-index="${current}"]`);
+      if(active) active.classList.add('active');
+    }
+
+    // Load track
+    function load(index){
+      const s = songs[index];
+      audio.src = s.src;
+      titleEl.textContent = s.title;
+      artistEl.textContent = s.artist;
+      coverImg.src = s.cover || 'placeholder.jpg';
+      highlight();
+    }
+
+    function playIndex(i){
+      current = i;
+      load(current);
+      play();
+    }
+
+    function play(){
+      audio.play().then(()=>{
+        isPlaying = true; playBtn.textContent = '⏸';
+      }).catch(err=>{
+        console.warn('play prevented', err);
+        // show UI change anyway
+        isPlaying = true; playBtn.textContent = '⏸';
+      });
+    }
+    function pause(){audio.pause(); isPlaying=false; playBtn.textContent = '▶'}
+
+    playBtn.addEventListener('click', ()=>{
+      if(!audio.src) load(current);
+      if(isPlaying) pause(); else play();
+    });
+    prevBtn.addEventListener('click', ()=>{
+      if(audio.currentTime>3) audio.currentTime=0; else prevTrack();
+    });
+    nextBtn.addEventListener('click', nextTrack);
+
+    function prevTrack(){
+      if(isShuffle) current = Math.floor(Math.random()*songs.length);
+      else current = (current-1+songs.length)%songs.length;
+      load(current); play();
+    }
+    function nextTrack(){
+      if(isShuffle) current = Math.floor(Math.random()*songs.length);
+      else current = (current+1)%songs.length;
+      load(current); play();
+    }
+
+    shuffleBtn.addEventListener('click', ()=>{isShuffle=!isShuffle; shuffleBtn.style.opacity = isShuffle?1:0.7});
+    repeatBtn.addEventListener('click', ()=>{repeatMode=!repeatMode; repeatBtn.style.opacity = repeatMode?1:0.7});
+
+    // Progress
+    audio.addEventListener('timeupdate', ()=>{
+      if(audio.duration){
+        const pct = (audio.currentTime / audio.duration) * 100;
+        progressBar.style.width = pct + '%';
+        curTime.textContent = formatTime(audio.currentTime);
+        dur.textContent = formatTime(audio.duration);
+      }
+    });
+    audio.addEventListener('ended', ()=>{
+      if(repeatMode) { audio.currentTime=0; play(); }
+      else nextTrack();
+    });
+
+    function formatTime(t){
+      if(!t || isNaN(t)) return '0:00';
+      const m = Math.floor(t/60); const s = Math.floor(t%60).toString().padStart(2,'0'); return `${m}:${s}`;
+    }
+
+    // Click to seek
+    progress.addEventListener('click', (e)=>{
+      const rect = progress.getBoundingClientRect();
+      const pct = (e.clientX - rect.left) / rect.width;
+      if(audio.duration) audio.currentTime = pct * audio.duration;
+    });
+
+    // Keyboard: space to play/pause
+    document.addEventListener('keydown', (e)=>{
+      if(e.code === 'Space'){
+        e.preventDefault(); if(isPlaying) pause(); else play();
+      }
+    });
+
+    // init
+    renderPlaylist();
+    load(current);
 </script>
 
 </html>
